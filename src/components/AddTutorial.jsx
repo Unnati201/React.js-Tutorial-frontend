@@ -39,20 +39,8 @@ const AddTutorial = () => {
           style={{ display: "flex", flexDirection: "column" }}
           onSubmit={async (event) => {
             event.preventDefault();
-
-            console.log(tutorialFormData);
-
             await saveTutorial(tutorialFormData);
-
             navigate("/");
-
-            // if (userDetails?.password !== userDetails?.confirmPassword) {
-            //   alert("Passwords does not match");
-            // } else {
-            //   navigate("/login", {
-            //     state: { password: userDetails?.password },
-            //   });
-            // }
           }}
         >
           <label>Title</label>

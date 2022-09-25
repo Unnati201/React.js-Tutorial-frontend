@@ -27,15 +27,12 @@ const Login = () => {
         onSubmit={(e) => {
           e.preventDefault();
 
-          context?.handleLogin();
-          navigate("/");
-
-          //   if (userDetails?.password !== location?.state?.password) {
-          //     alert("Password is incorrect");
-          //   } else {
-          //     context?.handleLogin();
-          //     navigate("/");
-          //   }
+          if (userDetails?.password !== location?.state?.password) {
+            alert("Password is incorrect");
+          } else {
+            context?.handleLogin();
+            navigate("/");
+          }
         }}
       >
         <label>Email</label>

@@ -9,7 +9,6 @@ const PrivateRoute = ({ children }) => {
   const context = useContext(AuthContext);
 
   useEffect(() => {
-    //both conditions are true
     if (!context?.isUserLoggedIn && !location.pathname.includes("login")) {
       navigate("/login");
     }
