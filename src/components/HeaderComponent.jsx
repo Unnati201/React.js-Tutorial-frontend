@@ -13,11 +13,27 @@ const HeaderComponent = () => {
             width: "100%",
             display: "flex",
             justifyContent: "space-evenly",
+            alignItems: "center",
           }}
         >
           <Link to="/">HomePage</Link>
           <Link to="/add">Add</Link>
           <Link to="/edit/:id">Edit</Link>
+          <button
+            type="button"
+            style={{
+              backgroundColor: "blue",
+              outline: "none",
+              padding: "5px",
+              color: "white",
+              border: "1px solid blue",
+              borderRadius: "5px",
+              cursor: "pointer",
+            }}
+            onClick={() => context?.handleLogout()}
+          >
+            Logout
+          </button>
         </div>
       </div>
     )

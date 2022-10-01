@@ -1,30 +1,32 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import PrivateRoute from "./PrivateRoute";
 import { Link } from "react-router-dom";
+import { AuthContext } from "../context/AuthContext";
 
 const ListTutorials = () => {
-  const [tutorials, setTutorials] = useState(null);
+  const context = useContext(AuthContext);
+  // const [tutorials, setTutorials] = useState(null);
 
-  useEffect(() => {
-    (async () => {
-      const response = await fetch("http://localhost:8080/api/tutorials", {
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-        },
-      });
-      const tutorialsData = await response.json();
-      setTutorials(tutorialsData);
-    })();
-  }, []);
+  // useEffect(() => {
+  //   (async () => {
+  //     const response = await fetch("http://localhost:8080/api/tutorials", {
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //         Accept: "application/json",
+  //       },
+  //     });
+  //     const tutorialsData = await response.json();
+  //     setTutorials(tutorialsData);
+  //   })();
+  // }, []);
 
   return (
     <PrivateRoute>
       <div style={{ marginTop: "100px" }}>
         <h1 style={{ textAlign: "center" }}>This is Tutorials Listing</h1>
-        {tutorials?.map(({ id, title, description }, indx) => (
+        {context?.tutorials?.map((item, index) => (
           <div
-            key={id}
+            key={index}
             style={{
               margin: "50px 0 50px 0",
               border: "1px solid black",
@@ -43,13 +45,14 @@ const ListTutorials = () => {
                 display: "flex",
                 justifyContent: "flex-end",
               }}
-              to={`/edit/${id}`}
+              to={"/"}
             >
               <p>Edit</p>
             </Link>
-            <Link to={`/details/${id}`}>
-              <h1>{title}</h1>
-              <p>{description}</p>
+            <Link to={`/`}>
+              <h1>{item.name}</h1>
+              <h3>{item.duration}</h3>
+              <p>{item.price}</p>
             </Link>
           </div>
         ))}

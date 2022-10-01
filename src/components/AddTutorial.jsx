@@ -1,34 +1,16 @@
-import React, { useState } from "react";
-import PrivateRoute from "./PrivateRoute";
+import React, { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { AuthContext } from "../context/AuthContext";
+import PrivateRoute from "./PrivateRoute";
 
 const AddTutorial = () => {
-  const [tutorialFormData, setTutorialFormData] = useState(null);
+  const [tutorials, setTutorials] = useState(null);
+  const context = useContext(AuthContext);
 
   const navigate = useNavigate();
 
   const handleChange = (event) => {
-    setTutorialFormData({
-      ...tutorialFormData,
-      [event.target.name]: event.target.value,
-    });
-  };
-
-  const saveTutorial = async (dataToSave) => {
-    const response = await fetch("http://localhost:8080/api/tutorials", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-      },
-      body: JSON.stringify({
-        title: dataToSave.title,
-        description: dataToSave.description,
-        published: dataToSave?.published === "true" ? true : false,
-      }),
-    });
-
-    const formatToJson = await response.json();
+    setTutorials({ ...tutorials, [event.target.name]: event.target.value });
   };
 
   return (
@@ -37,16 +19,36 @@ const AddTutorial = () => {
         <h1 style={{ textAlign: "center" }}>Add a New Tutorials</h1>
         <form
           style={{ display: "flex", flexDirection: "column" }}
-          onSubmit={async (event) => {
+          onSubmit={(event) => {
             event.preventDefault();
-            await saveTutorial(tutorialFormData);
-            navigate("/");
+            if (tutorials) {
+              context?.handleAddTutorial(tutorials);
+              navigate("/");
+            }
           }}
         >
-          <label>Title</label>
+          <label>Name of the Tutorials</label>
           <input
             style={{ height: "20px", marginTop: "10px" }}
-            name="title"
+            name="name"
+            type="text"
+            onChange={handleChange}
+          />
+          <br />
+          <br />
+          <label>Price</label>
+          <input
+            style={{ height: "20px", marginTop: "10px" }}
+            name="price"
+            type="number"
+            onChange={handleChange}
+          />
+          <br />
+          <br />
+          <label>Duration</label>
+          <input
+            style={{ height: "20px", marginTop: "10px" }}
+            name="duration"
             type="text"
             onChange={handleChange}
           />
@@ -60,20 +62,10 @@ const AddTutorial = () => {
             onChange={handleChange}
           />
           <br />
-          <br />
-          <label>Published</label>
-          <input
-            style={{ height: "20px", marginTop: "10px" }}
-            name="published"
-            type="text"
-            onChange={handleChange}
-          />
-          <br />
-          <br />
           <button
             style={{
               height: "30px",
-              marginTop: "30px",
+              margin: "30px 0 30px 0",
             }}
             type="submit"
           >
