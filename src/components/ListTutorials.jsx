@@ -5,26 +5,35 @@ import { AuthContext } from "../context/AuthContext";
 
 const ListTutorials = () => {
   const context = useContext(AuthContext);
-  // const [tutorials, setTutorials] = useState(null);
+  const [tutorials, setTutorials] = useState(null);
 
-  // useEffect(() => {
-  //   (async () => {
-  //     const response = await fetch("http://localhost:8080/api/tutorials", {
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //         Accept: "application/json",
-  //       },
-  //     });
-  //     const tutorialsData = await response.json();
-  //     setTutorials(tutorialsData);
-  //   })();
-  // }, []);
+  useEffect(() => {
+    (async () => {
+      try {
+        const response = await fetch(
+          "https://jsonplaceholder.typicode.com/postssssssss",
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Accept: "application/json",
+            },
+          }
+        );
+        const tutorialsData = await response.json();
+        setTutorials(tutorialsData);
+      } catch (err) {
+        throw new Error(`New Error Occured - ${err}`);
+      }
+    })();
+  }, []);
 
   return (
-    <PrivateRoute>
-      <div style={{ marginTop: "100px" }}>
-        <h1 style={{ textAlign: "center" }}>This is Tutorials Listing</h1>
-        {context?.tutorials?.map((item, index) => (
+    // <PrivateRoute>
+    <div style={{ marginTop: "100px" }}>
+      <h1 style={{ textAlign: "center" }}>This is Tutorials Listing</h1>
+
+      {tutorials
+        ?.map((item, index) => (
           <div
             key={index}
             style={{
@@ -50,14 +59,15 @@ const ListTutorials = () => {
               <p>Edit</p>
             </Link>
             <Link to={`/`}>
-              <h1>{item.name}</h1>
-              <h3>{item.duration}</h3>
-              <p>{item.price}</p>
+              <h1>{item.title}</h1>
+              <h3>{item.body}</h3>
+              {/* <p>{item.price}</p> */}
             </Link>
           </div>
-        ))}
-      </div>
-    </PrivateRoute>
+        ))
+        .slice(0, 5)}
+    </div>
+    // </PrivateRoute>
   );
 };
 

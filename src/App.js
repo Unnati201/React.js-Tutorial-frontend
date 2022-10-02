@@ -12,6 +12,7 @@ import Login from "./components/Login";
 import HeaderComponent from "./components/HeaderComponent";
 
 import "./App.css";
+import { CarDetails } from "./components/CarDetails";
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
         <AuthProvider>
           <HeaderComponent />
           <Routes>
+            <Route path="/car" element={<CarDetails />} />
             <Route path="/register" element={<Register />} />
             <Route path="/login" element={<Login />} />
             <Route path="/" element={<ListTutorials />} />
