@@ -13,50 +13,92 @@ const AddTutorial = () => {
     setTutorials({ ...tutorials, [event.target.name]: event.target.value });
   };
 
+  const handleAddTutorial = async () => {
+    try {
+      const savedTutorails = await fetch("http://localhost:3001/course/add", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          token: localStorage.getItem("token"),
+        },
+        body: JSON.stringify({
+          name: tutorials?.name,
+          description: tutorials?.description,
+          price: tutorials?.price,
+          duration: tutorials?.duration,
+        }),
+      });
+
+      const formatResponse = await savedTutorails.json();
+
+      //Error handling
+      if (!formatResponse?.isSuccess) {
+        throw new Error(formatResponse?.message);
+      }
+
+      alert(formatResponse?.message);
+
+      navigate("/");
+    } catch (err) {
+      alert(err);
+    }
+  };
+
   return (
     <PrivateRoute>
-      <div style={{ marginTop: "100px" }}>
-        <h1 style={{ textAlign: "center" }}>Add a New Tutorials</h1>
+      
+        <div style={{ marginTop: "50px" }}>
+        <h2 style={{ textAlign: "center", marginBottom: "30px" }}>
+          Add a New Tutorials
+        </h2>
         <form
           style={{ display: "flex", flexDirection: "column" }}
           onSubmit={(event) => {
             event.preventDefault();
             if (tutorials) {
-              context?.handleAddTutorial(tutorials);
-              navigate("/");
+              handleAddTutorial();
             }
           }}
         >
-          <label>Name of the Tutorials</label>
+          <label style={{ height: "30px",  margin: "100px auto auto auto",
+            width: "40vw"
+            }}>Name of tutorials</label>
           <input
-            style={{ height: "20px", marginTop: "10px" }}
+            style={{ height: "30px",  margin: "100px auto auto auto",
+            width: "40vw", marginTop: "5px" }}
             name="name"
             type="text"
             onChange={handleChange}
           />
           <br />
           <br />
-          <label>Price</label>
+          <label style={{ height: "30px",  margin: "100px auto auto auto",
+            width: "40vw", marginTop: "10px" }}>Price</label>
           <input
-            style={{ height: "20px", marginTop: "10px" }}
+            style={{ height: "30px", margin: "100px auto auto auto",
+            width: "40vw", marginTop: "10px" }}
             name="price"
             type="number"
             onChange={handleChange}
           />
           <br />
           <br />
-          <label>Duration</label>
+          <label style={{ height: "30px",  margin: "100px auto auto auto",
+            width: "40vw", marginTop: "10px" }}>Duration</label>
           <input
-            style={{ height: "20px", marginTop: "10px" }}
+            style={{ height: "30px", margin: "100px auto auto auto",
+            width: "40vw", marginTop: "5px" }}
             name="duration"
             type="text"
             onChange={handleChange}
           />
           <br />
           <br />
-          <label>Description</label>
+          <label style={{ height: "30px",  margin: "100px auto auto auto",
+            width: "40vw", marginTop: "10px" }}>Description</label>
           <input
-            style={{ height: "20px", marginTop: "10px" }}
+            style={{ height: "30px", margin: "100px auto auto auto",
+            width: "40vw", marginTop: "10px" }}
             name="description"
             type="text"
             onChange={handleChange}
@@ -64,8 +106,8 @@ const AddTutorial = () => {
           <br />
           <button
             style={{
-              height: "30px",
-              margin: "30px 0 30px 0",
+              height: "30px", margin: "100px auto auto auto",
+              width: "40vw", marginTop: "10px"
             }}
             type="submit"
           >

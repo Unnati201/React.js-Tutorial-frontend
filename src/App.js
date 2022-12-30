@@ -12,31 +12,31 @@ import Login from "./components/Login";
 import HeaderComponent from "./components/HeaderComponent";
 
 import "./App.css";
-import { CarDetails } from "./components/CarDetails";
 
 function App() {
   return (
     <div
-      style={{
+     /* style={{
         margin: "100px auto auto auto",
         width: "40vw",
-      }}
-    >
+      }}*/
+   >
       <Router>
         <AuthProvider>
           <HeaderComponent />
+          
           <Routes>
-            <Route path="/car" element={<CarDetails />} />
             <Route path="/register" element={<Register />} />
             <Route path="/login" element={<Login />} />
             <Route path="/" element={<ListTutorials />} />
-            <Route path="/add" element={<AddTutorial />} />
+            <Route  path="/add" element={<AddTutorial />} />
             <Route path="/edit/:id" element={<EditTutorial />} />
             <Route path="/details/:id" element={<GetSingleTutotial />} />
           </Routes>
         </AuthProvider>
       </Router>
     </div>
+    
   );
 }
 

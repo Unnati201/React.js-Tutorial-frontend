@@ -1,6 +1,6 @@
 import React, { useState, useContext, useEffect } from "react";
 
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, Link } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
 
 const Login = () => {
@@ -8,10 +8,52 @@ const Login = () => {
   const context = useContext(AuthContext);
   const navigate = useNavigate();
 
+  useEffect(() => {
+    try {
+      const token = localStorage.getItem("token");
+      if (token) {
+        context?.handleLogin();
+        navigate("/");
+      }
+    } catch (err) {
+      throw err;
+    }
+  }, []);
+
   const [userDetails, setUserDetails] = useState(null);
 
   const handleChange = (event) => {
     setUserDetails({ ...userDetails, [event.target.name]: event.target.value });
+  };
+
+  const handleLogin = async () => {
+    try {
+      const loggedInUser = await fetch("http://localhost:3001/users/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email: userDetails?.email,
+          password: userDetails?.password,
+        }),
+      });
+
+      const formatResponse = await loggedInUser.json();
+
+      //Error handling
+      if (!formatResponse?.isSuccess) {
+        throw new Error(formatResponse?.message);
+      }
+
+      alert(formatResponse?.message);
+
+      localStorage.setItem("token", formatResponse?.token);
+      context?.handleLogin();
+      navigate("/");
+    } catch (err) {
+      alert(err);
+    }
   };
 
   return (
@@ -26,14 +68,7 @@ const Login = () => {
         style={{ display: "flex", flexDirection: "column" }}
         onSubmit={(e) => {
           e.preventDefault();
-
-          if (userDetails?.password !== location?.state?.password) {
-            alert("Password is incorrect");
-          } else {
-            context?.handleLogin();
-
-            navigate("/");
-          }
+          handleLogin();
         }}
       >
         <label>Email</label>
@@ -57,6 +92,14 @@ const Login = () => {
         <button style={{ height: "30px", marginTop: "10px" }} type="submit">
           Login
         </button>
+        <Link to="/register">
+          <button
+            style={{ height: "30px", marginTop: "20px", width: "100%" }}
+            type="submit"
+          >
+            Register
+          </button>
+        </Link>
       </form>
     </div>
   );

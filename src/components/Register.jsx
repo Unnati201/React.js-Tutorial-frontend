@@ -10,6 +10,34 @@ const Register = () => {
 
   const navigate = useNavigate();
 
+  const handleRegistration = async () => {
+    try {
+      const savedUser = await fetch("http://localhost:3001/users/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name: userDetails?.name,
+          email: userDetails?.email,
+          password: userDetails?.password,
+        }),
+      });
+
+      const formatResponse = await savedUser.json();
+
+      //Error handling
+      if (!formatResponse?.isSuccess) {
+        throw new Error(formatResponse?.message);
+      }
+
+      alert(formatResponse?.message);
+      navigate("/login");
+    } catch (err) {
+      alert(err);
+    }
+  };
+
   return (
     <div
       style={{
@@ -26,13 +54,14 @@ const Register = () => {
           if (userDetails?.password !== userDetails?.confirmPassword) {
             alert("Passwords does not match");
           } else {
-            navigate("/login", { state: { password: userDetails?.password } });
+            //Calling register API
+            handleRegistration();
           }
         }}
       >
         <label>Name</label>
         <input
-          style={{ height: "20px", marginTop: "10px" }}
+          style={{ height: "30px", marginTop: "10px" }}
           name="name"
           type="text"
           onChange={handleChange}
@@ -41,7 +70,7 @@ const Register = () => {
         <br />
         <label>Email</label>
         <input
-          style={{ height: "20px", marginTop: "10px" }}
+          style={{ height: "30px", marginTop: "10px" }}
           name="email"
           type="email"
           onChange={handleChange}
@@ -50,7 +79,7 @@ const Register = () => {
         <br />
         <label>Password</label>
         <input
-          style={{ height: "20px", marginTop: "10px" }}
+          style={{ height: "30px", marginTop: "10px" }}
           name="password"
           type="password"
           onChange={handleChange}
@@ -59,7 +88,7 @@ const Register = () => {
         <br />
         <label>Confirm password</label>
         <input
-          style={{ height: "20px", marginTop: "10px" }}
+          style={{ height: "30px", marginTop: "10px" }}
           name="confirmPassword"
           type="password"
           onChange={handleChange}
